@@ -1,14 +1,10 @@
 FROM debian:stretch
+MAINTAINER Benedikt Loebbecke <mail@b3nedikt.dev>
 
-ENV FLUTTER_VERSION="v1.9.1+hotfix.6"
-ENV ANDROID_VERSION="28"
+ENV FLUTTER_VERSION="stable"
+ENV ANDROID_VERSION="29"
 
 # image mostly inspired from https://github.com/GoogleCloudPlatform/cloud-builders-community/blob/770e0e9/flutter/Dockerfile
-
-LABEL com.gableroux.flutter.name="debian linux image for Flutter" \
-      com.gableroux.flutter.license="MIT" \
-      com.gableroux.flutter.vcs-type="git" \
-      com.gableroux.flutter.vcs-url="https://github.com/gableroux/docker-flutter"
 
 WORKDIR /
 
@@ -56,5 +52,3 @@ RUN yes "y" | flutter doctor --android-licenses
 RUN flutter doctor -v
 
 ENV PATH $PATH:/flutter/bin/cache/dart-sdk/bin:/flutter/bin
-
-CMD ['ansible']
