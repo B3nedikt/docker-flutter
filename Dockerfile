@@ -1,4 +1,4 @@
-FROM runmymind/docker-android-sdk
+FROM runmymind/docker-android-sdk:ubuntu-standalone
 
 ENV FLUTTER_VERSION="stable"
 
