@@ -23,7 +23,4 @@ RUN flutter precache
 # Accept licenses.
 RUN yes "y" | flutter doctor --android-licenses
 
-# Perform a doctor run.
-RUN flutter doctor -v
-
 ENV PATH $PATH:/flutter/bin/cache/dart-sdk/bin:/flutter/bin
