@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM runmymind/docker-android-sdk
 
 ENV FLUTTER_VERSION="stable"
 
