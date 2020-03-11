@@ -1,29 +1,25 @@
-FROM budtmo/docker-android-x86-10.0:latest
+FROM ubuntu:18.04
 
-ENV FLUTTER_VERSION="stable"
+ENV ANDROID_HOME="/opt/android-sdk" \
+    PATH="/opt/android-sdk/tools/bin:/opt/flutter/bin:/opt/flutter/bin/cache/dart-sdk/bin:$PATH"
 
-# AdditionalEnvironment variables necessary for flutter
-ENV ANDROID_TOOLS_ROOT="/opt/android_sdk"
-ENV ANDROID_SDK_ARCHIVE="${ANDROID_TOOLS_ROOT}/archive"
-ENV PATH="${ANDROID_TOOLS_ROOT}/tools:${PATH}"
-ENV PATH="${ANDROID_TOOLS_ROOT}/tools/bin:${PATH}"
+RUN apt-get update > /dev/null \
+    && apt-get -y install --no-install-recommends curl git lib32stdc++6 openjdk-8-jdk-headless unzip > /dev/null \
+    && apt-get --purge autoremove > /dev/null \
+    && apt-get autoclean > /dev/null \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install Flutter.
-ENV FLUTTER_ROOT="/opt/flutter"
-RUN git clone --branch $FLUTTER_VERSION --depth=1 https://github.com/flutter/flutter "${FLUTTER_ROOT}"
-ENV PATH="${FLUTTER_ROOT}/bin:${PATH}"
-ENV ANDROID_HOME="${ANDROID_TOOLS_ROOT}"
+RUN git clone -b stable https://github.com/flutter/flutter.git /opt/flutter
 
-# Disable analytics and crash reporting on the builder.
-RUN flutter config  --no-analytics
+RUN curl -s -O https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip \
+    && mkdir /opt/android-sdk \
+    && unzip sdk-tools-linux-4333796.zip -d /opt/android-sdk > /dev/null \
+    && rm sdk-tools-linux-4333796.zip
 
-# Perform an artifact precache so that no extra assets need to be downloaded on demand.
-RUN flutter precache
-
-# Accept licenses.
-RUN yes "y" | flutter doctor --android-licenses
-
-# Perform a doctor run.
-RUN flutter doctor -v
-
-ENV PATH $PATH:/flutter/bin/cache/dart-sdk/bin:/flutter/bin
+RUN mkdir ~/.android \
+    && echo 'count=0' > ~/.android/repositories.cfg \
+    && yes | sdkmanager --licenses > /dev/null \
+    && sdkmanager "tools" "build-tools;29.0.0" "platforms;android-29" "platform-tools" > /dev/null \
+    && yes | sdkmanager --licenses > /dev/null \
+    && flutter doctor -v \
+    && chown -R root:root /opt
