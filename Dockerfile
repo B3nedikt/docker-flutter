@@ -37,11 +37,14 @@ ENV HOME=/tmp \
 RUN set -ex \
     && addgroup -S -g ${GID} scanner-cli \
     && adduser -S -D -u ${UID} -G scanner-cli scanner-cli \
-    && -U "scannercli" -q -O /opt/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
+    && wget -U "scannercli" -q -O /opt/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
     && cd /opt \
     && unzip sonar-scanner-cli.zip \
     && rm sonar-scanner-cli.zip \
     && mv sonar-scanner-${SONAR_SCANNER_VERSION} ${SONAR_SCANNER_HOME} \
+    && mkdir -p "${SRC_PATH}" "${SONAR_USER_HOME}" "${SONAR_USER_HOME}/cache"\
+    && chown -R scanner-cli:scanner-cli "${SONAR_SCANNER_HOME}" "${SRC_PATH}" \
+    && chmod -R 777 "${SRC_PATH}" "${SONAR_USER_HOME}"
 
 COPY --chown=scanner-cli:scanner-cli bin /usr/bin/
 
