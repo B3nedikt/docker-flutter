@@ -25,6 +25,8 @@ RUN mkdir ~/.android \
     && chown -R root:root /opt
 
 ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
+ARG UID=1000
+ARG GID=1000
 ENV HOME=/tmp \
     SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME} \
     SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
@@ -32,22 +34,16 @@ ENV HOME=/tmp \
     PATH=/opt/java/openjdk/bin:${SONAR_SCANNER_HOME}/bin:${PATH} \
     SRC_PATH=/usr/src
 
-RUN set -ex
-
-#&& apt-get git python3 bash shellcheck
-RUN apt-get update && apt-get -y install wget \
-	&& echo https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
-	&& wget -U "scannercli" -q -O /opt/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
-	&& ls && ls /opt \
+RUN set -ex \
+    && addgroup -S -g ${GID} scanner-cli \
+    && adduser -S -D -u ${UID} -G scanner-cli scanner-cli \
+    && -U "scannercli" -q -O /opt/sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
     && cd /opt \
     && unzip sonar-scanner-cli.zip \
     && rm sonar-scanner-cli.zip \
-    && echo https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
-    && echo sonar-scanner-${SONAR_SCANNER_VERSION} \
     && mv sonar-scanner-${SONAR_SCANNER_VERSION} ${SONAR_SCANNER_HOME} \
-    && cd .. \
-    && cp -r bin usr/bin
-#COPY /bin /usr/bin/
+
+COPY --chown=scanner-cli:scanner-cli bin /usr/bin/
 
 WORKDIR ${SRC_PATH}
 
