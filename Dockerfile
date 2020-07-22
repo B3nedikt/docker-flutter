@@ -7,7 +7,6 @@ ENV HOME=/tmp \
     SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME} \
     SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
     SONAR_SCANNER_VERSION=4.4.0.2170 \
-    SRC_PATH=/usr/src
     ANDROID_HOME="/opt/android-sdk" \
     PATH="/opt/android-sdk/tools/bin:/opt/flutter/bin:/opt/flutter/bin/cache/dart-sdk/bin:${SONAR_SCANNER_HOME}/bin:$PATH"
 
@@ -40,14 +39,8 @@ RUN set -ex \
     && unzip sonar-scanner-cli.zip \
     && rm sonar-scanner-cli.zip \
     && mv sonar-scanner-${SONAR_SCANNER_VERSION} ${SONAR_SCANNER_HOME} \
-    && mkdir -p "${SRC_PATH}" "${SONAR_USER_HOME}" "${SONAR_USER_HOME}/cache"\
-    && chown -R scanner-cli:scanner-cli "${SONAR_SCANNER_HOME}" "${SRC_PATH}" \
-    && chmod -R 777 "${SRC_PATH}" "${SONAR_USER_HOME}"
+    && mkdir -p "${SONAR_USER_HOME}" "${SONAR_USER_HOME}/cache"\
+    && chown -R scanner-cli:scanner-cli "${SONAR_SCANNER_HOME}" \
+    && chmod -R 777 "${SONAR_USER_HOME}"
 
 COPY --chown=scanner-cli:scanner-cli bin /usr/bin/
-
-WORKDIR ${SRC_PATH}
-
-ENTRYPOINT ["/usr/bin/entrypoint.sh"]
-
-CMD ["sonar-scanner"]
