@@ -1,10 +1,18 @@
 FROM ubuntu:18.04
 
-ENV ANDROID_HOME="/opt/android-sdk" \
-    PATH="/opt/android-sdk/tools/bin:/opt/flutter/bin:/opt/flutter/bin/cache/dart-sdk/bin:$PATH"
+ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
+ARG UID=1000
+ARG GID=1000
+ENV HOME=/tmp \
+    SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME} \
+    SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
+    SONAR_SCANNER_VERSION=4.4.0.2170 \
+    SRC_PATH=/usr/src
+    ANDROID_HOME="/opt/android-sdk" \
+    PATH="/opt/android-sdk/tools/bin:/opt/flutter/bin:/opt/flutter/bin/cache/dart-sdk/bin:${SONAR_SCANNER_HOME}/bin:$PATH"
 
 RUN apt-get update > /dev/null \
-    && apt-get -y install --no-install-recommends curl git lib32stdc++6 openjdk-8-jdk-headless unzip > /dev/null \
+    && apt-get -y install --no-install-recommends curl git lib32stdc++6 openjdk-8-jdk-headless unzip wget > /dev/null \
     && apt-get --purge autoremove > /dev/null \
     && apt-get autoclean > /dev/null \
     && rm -rf /var/lib/apt/lists/*
@@ -23,16 +31,6 @@ RUN mkdir ~/.android \
     && yes | sdkmanager --licenses > /dev/null \
     && flutter doctor -v \
     && chown -R root:root /opt
-
-ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
-ARG UID=1000
-ARG GID=1000
-ENV HOME=/tmp \
-    SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME} \
-    SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
-    SONAR_SCANNER_VERSION=4.4.0.2170 \
-    PATH=/opt/java/openjdk/bin:${SONAR_SCANNER_HOME}/bin:${PATH} \
-    SRC_PATH=/usr/src
 
 RUN set -ex \
     && addgroup -S -g ${GID} scanner-cli \
