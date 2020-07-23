@@ -32,3 +32,4 @@ RUN set -ex \
     && mkdir ${SONAR_SCANNER_HOME} \
     && unzip sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip -d ${SONAR_SCANNER_HOME} > /dev/null \
     && rm sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
+    && echo `which sonar-scanner`
