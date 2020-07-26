@@ -31,5 +31,5 @@ RUN curl -s -O https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/s
     && mkdir ${SONAR_SCANNER_HOME} \
     && unzip sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip > /dev/null  \
     && mv sonar-scanner-${SONAR_SCANNER_VERSION}/* ${SONAR_SCANNER_HOME} \
-    && rm sonar-scanner-${SONAR_SCANNER_VERSION}.zip \
-    && rm sonar-scanner-${SONAR_SCANNER_VERSION}
+    && rm sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
+    && rm -r sonar-scanner-${SONAR_SCANNER_VERSION}
