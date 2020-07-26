@@ -30,6 +30,6 @@ RUN mkdir ~/.android \
 RUN curl -s -O https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
     && mkdir ${SONAR_SCANNER_HOME} \
     && unzip sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip > /dev/nullcd  \
-    && mv sonar-scanner-cli-${SONAR_SCANNER_VERSION}/* ${SONAR_SCANNER_HOME}
-    && rm sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip
+    && mv sonar-scanner-cli-${SONAR_SCANNER_VERSION}/* ${SONAR_SCANNER_HOME} \
+    && rm sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
     && rm sonar-scanner-cli-${SONAR_SCANNER_VERSION}
