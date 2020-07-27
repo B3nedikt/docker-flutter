@@ -7,7 +7,7 @@ ENV SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
     PATH="/opt/android-sdk/tools/bin:/opt/flutter/bin:/opt/flutter/bin/cache/dart-sdk/bin:${SONAR_SCANNER_HOME}/bin:$PATH"
 
 RUN apt-get update > /dev/null \
-    && apt-get -y install --no-install-recommends curl git lib32stdc++6 openjdk-8-jdk-headless unzip wget > /dev/null \
+    && apt-get -y install --no-install-recommends curl git lib32stdc++6 openjdk-14-jdk-headless unzip wget > /dev/null \
     && apt-get --purge autoremove > /dev/null \
     && apt-get autoclean > /dev/null \
     && rm -rf /var/lib/apt/lists/*
