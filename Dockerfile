@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04 
 
 ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
 ENV SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
