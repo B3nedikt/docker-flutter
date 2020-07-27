@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 
+FROM ubuntu:18.04 
 
 ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
 ENV SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
@@ -7,7 +7,7 @@ ENV SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
     PATH="/opt/android-sdk/tools/bin:/opt/flutter/bin:/opt/flutter/bin/cache/dart-sdk/bin:${SONAR_SCANNER_HOME}/bin:$PATH"
 
 RUN apt-get update > /dev/null \
-    && apt-get -y install --no-install-recommends curl git lib32stdc++6 openjdk-14-jdk-headless unzip wget > /dev/null \
+    && apt-get -y install --no-install-recommends curl git lib32stdc++6 openjdk-8-jdk-headless unzip wget > /dev/null \
     && apt-get --purge autoremove > /dev/null \
     && apt-get autoclean > /dev/null \
     && rm -rf /var/lib/apt/lists/*
@@ -27,9 +27,9 @@ RUN mkdir ~/.android \
     && flutter doctor -v \
     && chown -R root:root /opt
 
-RUN curl -s -O https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
+RUN curl -s -O https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip \
     && mkdir ${SONAR_SCANNER_HOME} \
-    && unzip sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip > /dev/null  \
-    && mv sonar-scanner-${SONAR_SCANNER_VERSION}/* ${SONAR_SCANNER_HOME} \
-    && rm sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip \
-    && rm -r sonar-scanner-${SONAR_SCANNER_VERSION}
+    && unzip sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip > /dev/null  \
+    && mv sonar-scanner-${SONAR_SCANNER_VERSION}-linux/* ${SONAR_SCANNER_HOME} \
+    && rm sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip \
+    && rm -r sonar-scanner-${SONAR_SCANNER_VERSION}-linux
